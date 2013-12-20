@@ -1,46 +1,44 @@
-// EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE //
-//                                                                              //
-//  Class name: Stopwords                                                       //
-//  File type: implementation                                                   //
-//  Version: 2.0.12.19.2013                                                     //
-//                                                                              //
-//  Description: the StopWords class contains all the words the program will    //
-//  ignore when parsing documents. It also provides functionallyty to check if  //
-//  is a stop word or not                                                       //
-//                                                                              //
-// EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE //
-
+// EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE //
+//                                                                            //
+//  Class name: Stopwords                                                     //
+//  File type: implementation                                                 //
+//  Version: 2.0.12.19.2013                                                   //
+//                                                                            //
+//  Description: the StopWords class contains all the words the program will  //
+//  ignore when parsing documents. It also provides functionallyty to check   //
+//  if it is a stop word or not                                               //
+//                                                                            //
+// EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE //
 
 #include "StopWords.h"
 
 using namespace std;
 
 
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
-//                                                                              //
-//  StopWords:                                                                  //
-//     Constructor for the StopWords class. It reads all the stop words from the//
-//     file into the vector                                                     //
-//                                                                              //
-//  Parameters:                                                                 //
-//     char fileName[]: char array that contains the name of the file with the  //
-//     stop words                                                               //
-//                                                                              //
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+//                                                                            //
+//  StopWords:                                                                //
+//     Constructor for the StopWords class. It reads all the stop words from  //
+//     the file into the vector                                               //
+//                                                                            //
+//  Parameters:                                                               //
+//     char fileName[]: char array that contains the name of the file with    //
+//     the stop words                                                         //
+//                                                                            //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
 
-StopWords::StopWords(char fileName[])
+StopWords::StopWords(char* fileName)
 {
 	string stop = " ";
 
 	//opening file containing stop words
-	ifstream inPut;
-	inPut.open(fileName);
+	ifstream inPut(fileName);
 
 	//If the file isn't open the program displays and error and exists
 	if (!inPut.is_open())
 	{
-		cerr << "Impossible to open file " << fileName << endl;
-		exit(0);
+		//cerr << "Impossible to open file " << fileName << endl;
+		throw std::runtime_error(std::string("Unable to open file");
 	}
 
 	//If the file is open it add all the stop word to the stopWords vector
@@ -50,26 +48,26 @@ StopWords::StopWords(char fileName[])
 		_stopWords.push_back(stop);
 	}
 
-	inPut.close();
-}
+} // input is closed in ifstream destructor
 
 
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
-//                                                                              //
-//  isStop:                                                                     //
-//     Recursive binary search until it finds the word or the word isn't there  //
-//                                                                              //
-//  Parameters:                                                                 //
-//     string check: string with the stop word to check if it is in the vector  //
-//     int star: smaller position on the vector to start looking                //
-//     int end: highest position in the vecotr to look                          //
-//                                                                              //
-//  Return:                                                                     //
-//     Boolean: true if the word is in the vector, and false otherwise          //
-//                                                                              //
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+//                                                                            //
+//  isStop:                                                                   //
+//     Recursive binary search until it finds the word or the word isn't      //
+//     there                                                                  //
+//  Parameters:                                                               //
+//     string check: string with the stop word to check if it is in the       //
+//     vector                                                                 //
+//     int star: smaller position on the vector to start looking              //
+//     int end: highest position in the vecotr to look                        //
+//                                                                            //
+//  Return:                                                                   //
+//     Boolean: true if the word is in the vector, and false otherwise        //
+//                                                                            //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
 
-bool StopWords::isStop(string check, int start, int end)
+bool StopWords::isStop(string& check, int start, int end)
 {
 	int middle;
 
@@ -95,36 +93,36 @@ bool StopWords::isStop(string check, int start, int end)
 }
 
 
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
-//                                                                              //
-//  addStopWord:                                                                //
-//     adds a stop word to the end of the vector                                //
-//                                                                              //
-//  Parameters:                                                                 //
-//     string stop: string with the stop word to be added to the vector         //
-//                                                                              //
-//  Return:                                                                     //
-//     void                                                                     //
-//                                                                              //
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+//                                                                            //
+//  addStopWord:                                                              //
+//     adds a stop word to the end of the vector                              //
+//                                                                            //
+//  Parameters:                                                               //
+//     string stop: string with the stop word to be added to the vector       //
+//                                                                            //
+//  Return:                                                                   //
+//     void                                                                   //
+//                                                                            //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
 
-void StopWords::addStopWord(string stop)
+void StopWords::addStopWord(string& stop)
 {
 	_stopWords.push_back(stop);
 }
 
 
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
-//                                                                              //
-//  getSize:                                                                    //
-//     Gets the size of the vector, the number of stop words                    //
-//                                                                              //
-//  Parameters:                                                                 //
-//                                                                              //
-//  Return:                                                                     //
-//     int: the size of the stopWords vector                                    //
-//                                                                              //
-// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
+//                                                                            //
+//  getSize:                                                                  //
+//     Gets the size of the vector, the number of stop words                  //
+//                                                                            //
+//  Parameters:                                                               //
+//                                                                            //
+//  Return:                                                                   //
+//     int: the size of the stopWords vector                                  //
+//                                                                            //
+// eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee //
 
 int StopWords::getSize()
 {
